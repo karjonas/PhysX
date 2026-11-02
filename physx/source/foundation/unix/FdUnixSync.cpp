@@ -84,7 +84,7 @@ void PxSyncImpl::set()
 	if(!getSync(this)->is_set)
 	{
 		getSync(this)->is_set = true;
-		getSync(this)->setCounter++;
+		getSync(this)->setCounter = getSync(this)->setCounter + 1;
 		pthread_cond_broadcast(&getSync(this)->cond);
 	}
 }

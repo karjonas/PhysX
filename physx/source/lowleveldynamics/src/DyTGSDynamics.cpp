@@ -42,7 +42,10 @@ constexpr bool tIsLastPosIter = true;
 	static inline void incrementBodyProgress(PxTGSSolverBodyVel& body)
 	{
 		if (body.nbStaticInteractions != 0)
-			(*reinterpret_cast<volatile PxU32*>(&body.partitionMask))++;
+		{
+			volatile PxU32* progress = reinterpret_cast<volatile PxU32*>(&body.partitionMask);
+			*progress = *progress + 1;
+		}
 	}
 
 	static inline void waitForArticulationProgress(Dy::FeatherstoneArticulation& artic, PxU32 desiredProgress, PxU32 iteration)
@@ -56,7 +59,8 @@ constexpr bool tIsLastPosIter = true;
 
 	static inline void incrementArticulationProgress(Dy::FeatherstoneArticulation& artic)
 	{
-		(*reinterpret_cast<volatile PxU32*>(&artic.mSolverProgress))++;
+		volatile PxU32* progress = reinterpret_cast<volatile PxU32*>(&artic.mSolverProgress);
+		*progress = *progress + 1;
 	}
 
 	static inline void waitForProgresses(const PxSolverConstraintDesc& desc, PxU32 iteration)
